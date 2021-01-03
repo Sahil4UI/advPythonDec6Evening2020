@@ -52,3 +52,17 @@ def insertQues(test_id,ques,opt_1,opt_2,opt_3,opt_4,ans):
     values=(test_id,ques,opt_1,opt_2,opt_3,opt_4,ans)
     cursor.execute(query,values)
     connection.commit()
+
+
+def getSubjects(grade):
+    query= f"select subject from test where grade = {grade}"
+    cursor.execute(query)
+    sub  =cursor.fetchall()
+    return sub
+
+def getTestInfo(grade,sub):
+    query = "select * from test where grade=%s and subject=%s"
+    value=(grade,sub)
+    cursor.execute(query,value)
+    test_info = cursor.fetchall()
+    return test_info

@@ -22,3 +22,11 @@ def getTest(id):
 def insertQues(test_id,ques,opt_1,opt_2,opt_3,opt_4,ans):
     model.insertQues(test_id,ques,opt_1,opt_2,opt_3,opt_4,ans)
 
+def getSubjects(grade):
+    sub=model.getSubjects(grade)
+    return sub
+
+def getTestInfo(grade,sub):
+    test_info = model.getTestInfo(grade,sub)
+    return test_info
+    

@@ -31,3 +31,10 @@ def getTest(id):
 def insertQues(test_id,ques,opt_1,opt_2,opt_3,opt_4,ans):
     io_data.insertQues(test_id,ques,opt_1,opt_2,opt_3,opt_4,ans)
     
+def getSubjects(grade):
+    sub=io_data.getSubjects(grade)
+    return sub
+
+def getTestInfo(grade,sub):
+    test_info = io_data.getTestInfo(grade,sub)
+    return test_info
