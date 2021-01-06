@@ -38,3 +38,7 @@ def getSubjects(grade):
 def getTestInfo(grade,sub):
     test_info = io_data.getTestInfo(grade,sub)
     return test_info
+
+def getQuestions(t_id):
+    ques = io_data.getQuestions(t_id)
+    return ques

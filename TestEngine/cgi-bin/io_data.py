@@ -66,3 +66,9 @@ def getTestInfo(grade,sub):
     cursor.execute(query,value)
     test_info = cursor.fetchall()
     return test_info
+
+def getQuestions(t_id):
+    query = f"select * from questions where test_id={t_id}"
+    cursor.execute(query)
+    ques = cursor.fetchall()
+    return ques
