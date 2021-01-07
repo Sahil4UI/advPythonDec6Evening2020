@@ -19,19 +19,25 @@ print(f"""
 
     <h1>Start Test</h1>
     <hr>
-    <form action="submitTest.py">""")
+    <form action="result.py">""")
+print(f"""
+            <input type="hidden" name="t_id" value={t_id}>
+            <input type="hidden" name="num_ques" value={len(ques)}>
+
+    """)
 for i in range(len(ques)):
     print(f"""<h4>{ques[i][1]}</h4>
               """)
     for j in range(2,6):
         print(f""" <ul>
         <li>
-                            <input type="radio" name="ques_{i+1}">
+                            <input type="radio" name="ques_{i+1}" value="{ques[i][j]}">
                             <label>{ques[i][j]}</label>
                     </li>
                     </ul>    
     """)
 print("""
+    <input type="submit" value="submit">
 </form>
 </body>
 </html>""")

@@ -30,3 +30,6 @@ def getTestInfo(grade,sub):
     test_info = model.getTestInfo(grade,sub)
     return test_info
     
+def getQuestions(t_id):
+    ques = model.getQuestions(t_id)
+    return ques
