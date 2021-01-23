@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-class Ui_MainWindow(object):
+class Ui_MainWindow(QtWidgets.QMainWindow):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(642, 472)
@@ -126,7 +126,40 @@ class Ui_MainWindow(object):
         self.pushButton_9.setText(_translate("MainWindow", "6"))
         self.pushButton_10.setText(_translate("MainWindow", "3"))
         self.label_4.setText(_translate("MainWindow", "WINNER"))
-
+        self.frame.hide()
+        
+        self.initEvents()
+        
+    def initEvents(self):
+            self.pushButton.clicked.connect(self.StartGame)
+            
+            user_btns = [self.pushButton_2,self.pushButton_3,self.pushButton_4,self.pushButton_5,
+                         self.pushButton_6,self.pushButton_7,self.pushButton_8,self.pushButton_9,self.pushButton_10]
+            cpu_btns = user_btns.copy()
+            
+            for btn in user_btns:
+                btn.clicked.connect(self.user_move)
+                
+        
+            for btn in cpu_btns:
+                btn.clicked.connect(self.cpu_move)
+    def user_move(self):
+            btn=self.sender()
+            btn.setText(self.user_ch)
+            btn.setDisabled(True)
+    def cpu_move(self):
+            pass
+    def StartGame(self):
+            if self.radioButton.isChecked():
+                self.user_ch=self.radioButton.text()
+                self.cpu_ch=self.radioButton_2.text()
+            elif self.radioButton_2.isChecked():
+                self.user_ch=self.radioButton_2.text()
+                self.cpu_ch=self.radioButton.text()
+            print(self.user_ch,self.cpu_ch)
+            
+            self.frame.show()
+        
 
 if __name__ == "__main__":
     import sys
