@@ -11,6 +11,8 @@ import random
 import threading
 import socket
 import json
+from PyQt5.QtWidgets import QMessageBox
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(QtWidgets.QMainWindow):
     def setupUi(self, MainWindow):
@@ -97,9 +99,6 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.label_4.setGeometry(QtCore.QRect(470, 20, 111, 51))
         self.label_4.setStyleSheet("font: 20pt \"MS Shell Dlg 2\";")
         self.label_4.setObjectName("label_4")
-        self.lineEdit = QtWidgets.QLineEdit(self.frame)
-        self.lineEdit.setGeometry(QtCore.QRect(450, 70, 161, 31))
-        self.lineEdit.setObjectName("lineEdit")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 642, 21))
@@ -148,7 +147,6 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             
     def user_move(self):
             btn=self.sender()
-            btn.setDisabled(True)
             btn.setText(self.user_ch)
             btn.setDisabled(True)
             self.pos = self.user_btns.index(btn)
@@ -156,10 +154,11 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             self.sendPosition(self.pos)
             
     def client_move(self,pos):
+        print(pos)
         btn = self.user_btns[pos]
         btn.setText(self.client_ch)
         btn.setDisabled(True)
-        self.pos = self.user_btns.index(btn)
+        
         self.checkWinner(self.client_ch)
         
             
@@ -177,7 +176,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         
         for i in self.combinations:
             if i[0].text()==choice and i[1].text()==choice and i[2].text()==choice:
-                return "winner" 
+                QMessageBox.about(self,"Game Over","Server Wins")
+                
    
         
     def StartGame(self):

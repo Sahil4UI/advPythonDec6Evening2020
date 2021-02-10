@@ -12,6 +12,7 @@ import threading
 import socket
 import json
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QMessageBox
 class Ui_MainWindow(QtWidgets.QMainWindow):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -97,9 +98,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.label_4.setGeometry(QtCore.QRect(470, 20, 111, 51))
         self.label_4.setStyleSheet("font: 20pt \"MS Shell Dlg 2\";")
         self.label_4.setObjectName("label_4")
-        self.lineEdit = QtWidgets.QLineEdit(self.frame)
-        self.lineEdit.setGeometry(QtCore.QRect(450, 70, 161, 31))
-        self.lineEdit.setObjectName("lineEdit")
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 642, 21))
@@ -125,36 +124,46 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.pushButton_5.setText(_translate("MainWindow", "8"))
         self.pushButton_8.setText(_translate("MainWindow", "9"))
         self.frame.show()
+        threading.Thread(target=self.startClient).start()    
+
         self.initEvents()
         
     def initEvents(self):
             
-            self.user_btns = [self.pushButton_2,self.pushButton_3,self.pushButton_4,self.pushButton_5,
+        self.btns = [self.pushButton_2,self.pushButton_3,self.pushButton_4,self.pushButton_5,
                          self.pushButton_6,self.pushButton_7,self.pushButton_8,self.pushButton_9,self.pushButton_10]
             
-            threading.Thread(target=self.startClient).start()    
             
-            for btn in self.user_btns:
-                btn.clicked.connect(self.user_move)
+        for i in range(len(self.btns)):
+                self.btns[i].clicked.connect(self.user_move)
                 
         
             
     def user_move(self):
+        print("user move called")
+        try:
             btn=self.sender()
+            btn.setText(self.client_ch)
             btn.setDisabled(True)
-            btn.setText(self.user_ch)
-            btn.setDisabled(True)
-            self.pos = self.user_btns.index(btn)
-            self.checkWinner(self.user_ch)
+            self.pos = self.btns.index(btn)
+            self.checkWinner(self.client_ch)
+            print("pos = ",self.pos)
             self.sendPosition(self.pos)
+        except BaseException as ex:
+            print(ex)
             
     def server_move(self,pos,ch):
-        btn = self.user_btns[pos]
+        btn = self.btns[pos]
         btn.setText(ch)
         btn.setDisabled(True)
-        self.pos = self.user_btns.index(btn)
         self.checkWinner(self.server_ch)
-        
+
+    
+    def sendPosition(self,pos):
+        print(pos)
+        msg={"pos":pos}
+        msg = json.dumps(msg)
+        self.s.send(msg.encode())
             
     def checkWinner(self,choice):
         self.combinations= [
@@ -170,15 +179,10 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         
         for i in self.combinations:
             if i[0].text()==choice and i[1].text()==choice and i[2].text()==choice:
-                return "winner" 
+                QMessageBox.about(self,"Game Over","Client Wins")
    
         
             
-    def sendPosition(self,pos):
-        msg={"pos":pos}
-        msg = json.dumps(msg)
-        self.s.send(msg.encode())
-        
             
     def startClient(self):
         self.s = socket.socket()
@@ -187,14 +191,14 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.s.connect((self.ip,self.port))
         while True:
             recv_msg = self.s.recv(100000)
-            print("Server : ",recv_msg)
             recv_msg = json.loads(recv_msg)
+            print("Server : ",recv_msg)
+
             self.serverPos = recv_msg['pos']
             self.server_ch = recv_msg['serverCh']
             self.client_ch = recv_msg['clientCh']
             
             self.server_move(self.serverPos,self.server_ch)
-        self.conn.close()
         
         
 
