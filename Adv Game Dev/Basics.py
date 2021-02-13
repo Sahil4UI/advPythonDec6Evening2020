@@ -36,6 +36,7 @@ class Player(pygame.sprite.Sprite):
             self.health -=5
         self.playerHealth()
     def playerHealth(self):
+        # pygame.draw.rect(screen,color, [x,y , w,h])
         pygame.draw.rect(screen,green, [5,5,self.health ,25])
     
     def Shoot(self):
@@ -52,7 +53,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image.fill(black)
         self.rect=self.image.get_rect()
         self.rect.x=random.randint(0,width -50)
-        self.rect.y = random.randint(0,height-50)
+        self.rect.y = random.randint(-height,0)
         self.moveY = random.randint(1,4)
         
     def update(self,*args):
